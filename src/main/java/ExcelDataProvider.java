@@ -2,6 +2,7 @@
  * Data provider for ExcelReaderImpl
  * Created by AZiatdinov on 09.02.2017.
  */
+// TODO: ужасное название для ячейки. Может просто Cell?
 class ExcelDataProvider {
     private Object value;
     private int regionId;

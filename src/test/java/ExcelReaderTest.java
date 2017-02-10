@@ -17,6 +17,7 @@ public class ExcelReaderTest {
         String path = ".\\src\\main\\resources\\Table.xlsx";
 
         excelReader.setExcelFile(path);
+        //TODO: все check error-ы - это негативные ТС и делаются отдельно. Лучше 100 маленьких тестов, чем 1 большой
         excelReader.switchToSheet(123); // Check error
         excelReader.switchToSheet("Main");
 
@@ -24,7 +25,7 @@ public class ExcelReaderTest {
         for (Object[] rowData: dataTable){
             for (Object cellData: rowData){
                 ExcelDataProvider data = (ExcelDataProvider) cellData;
-                Assert.assertNotNull("Can't read file " + path + " ", data);
+                Assert.assertNotNull("Can't read file " + path + " ", data); // TODO: а это что за странный assert?
                 log.info("Table value is: " + String.valueOf(data.getValue()) + " regionId: " + data.getRegionId());
             }
         }

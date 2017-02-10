@@ -14,7 +14,8 @@ import java.util.logging.Logger;
  */
 
 class ExcelReaderImpl implements ExcelReader {
-
+    // TODO: Общее замечание: если ты кладешь в результат экземпляры конкрентного класса, то нужно переделать c Object на
+    // TODO: этот класс. Это обеспечит как контроль, так и удобство использования (не придется приводить к типу)
     private XSSFWorkbook excelWBook;
     private XSSFSheet excelWSheet;
 
@@ -24,6 +25,7 @@ class ExcelReaderImpl implements ExcelReader {
 
 
     // Определяет файл для работы
+    // TODO: коммент неудачный.
     public void setExcelFile(String Path) {
         try {
             FileInputStream ExcelFile = new FileInputStream(Path);
@@ -36,6 +38,7 @@ class ExcelReaderImpl implements ExcelReader {
 
 
     // Переключается на вкладку с указанным именем
+    // TODO: Все аналогичные тудушки из метода ниже
     public void switchToSheet(String SheetName) {
         try {
             int sheetIndex = excelWBook.getSheetIndex(SheetName);
@@ -47,6 +50,11 @@ class ExcelReaderImpl implements ExcelReader {
 
 
     // Переключается на вкладку с указанным номером
+    // TODO: не нужно здесь отлавливать Exception, не принимай ответственность за косячно указанный "снаружи" номер страницы на внутренний класс.
+    // TODO: Если нет страницы с таким номером, об этом нужно уведоммить, а не "тихонько" вывести в лог и не произвести ожидаемого действия,
+    // TODO: иначе получим
+    // TODO: 1. трудноуловимую ошибку
+    // TODO: 2. невозможность определить произошло ли фактическое переключение на вкладку из вызывающего класса
     public void switchToSheet(int number) {
         try {
             excelWSheet = excelWBook.getSheetAt(number);
@@ -80,17 +88,20 @@ class ExcelReaderImpl implements ExcelReader {
 
 
     // Выводит данные ячейки
+    // TODO: оно у тебя выводит экземпляр вполне конкретного класса - давай переделаем возвращаемый тип на реальный
     public Object getCellData(int rowNum, int colNum) {
         int region = getMergedRegion(rowNum, colNum);
         XSSFCell cell;
         try {
             if (region >= 0){
                 cell = getMergedRegionStringValue(rowNum, colNum);
+                // TODO: вынести из if, ибо дублируется
                 return getStringValueFromCell(region, cell);
             } else {
                 cell = excelWSheet.getRow(rowNum).getCell(colNum);
+                // TODO: вынести из if (удалить)
                 return getStringValueFromCell(region, cell);
-            }
+            } //TODO: после удаления переделать на тернарный оператор
         } catch (Exception e){
             log.info("Can't read cell data " + e.getMessage());
             return null;

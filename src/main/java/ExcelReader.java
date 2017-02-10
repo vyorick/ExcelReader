@@ -14,8 +14,12 @@ interface ExcelReader {
     void switchToSheet(int number);
 
     // Выводит таблицу данных
+    // TODO: правильно ли я понимаю, что длина вложенных масивов различна? Если "да", то лучше указать этот момент
+    // TODO: getData => getCurrentSheetData
+    // TODO: может тогда сделаем обертку: getSheetData(String sheetName)?
     Object[][] getData();
 
+    // TODO: не выводит, а возвращает
     // Выводит содержимое строки по её номеру
     Object[] getRowData(int rowNo);
 
